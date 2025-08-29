@@ -167,6 +167,18 @@ class _VideoPageBuilderState extends State<VideoPageBuilder> {
     controller.play();
   }
 
+  double? get aspectRatio {
+    final state = controller.value;
+    if (!state.isInitialized) {
+      return null;
+    }
+    var aspectRatio = state.aspectRatio;
+    if (state.rotationCorrection == 90 || state.rotationCorrection == 270) {
+      aspectRatio = 1 / aspectRatio;
+    }
+    return aspectRatio;
+  }
+
   Widget _contentBuilder(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
@@ -174,7 +186,7 @@ class _VideoPageBuilderState extends State<VideoPageBuilder> {
         Positioned.fill(
           child: Center(
             child: AspectRatio(
-              aspectRatio: controller.value.aspectRatio,
+              aspectRatio: aspectRatio ?? controller.value.aspectRatio,
               child: VideoPlayer(controller),
             ),
           ),
